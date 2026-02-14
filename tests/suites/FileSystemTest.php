@@ -16,95 +16,94 @@ use PHPUnit\Framework\TestCase;
 
 class FileSystemTest extends TestCase
 {
-    /**
-     * Set up for all tests
-     */
+    private string $testDir = '';
+
     public function setUp(): void
     {
         error_reporting(-1);
-        ini_set('open_basedir', __DIR__ . '/../../:' . sys_get_temp_dir());
+        $this->testDir = sys_get_temp_dir() . '/phrity-filesystem';
+        ini_set('open_basedir', __DIR__ . '/../../:' . $this->testDir);
     }
 
     public function testExists(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         // Absolute paths
-        $this->assertTrue($fs->exists("{$bp}/empty-file"));
-        $this->assertTrue($fs->exists("{$bp}/empty-dir"));
-        $this->assertTrue($fs->exists("{$bp}/symlink-file"));
-        $this->assertTrue($fs->exists("{$bp}/symlink-dir"));
-        $this->assertTrue($fs->exists("{$bp}/readonly-file"));
-        $this->assertFalse($fs->exists("{$bp}/non-existing"));
+        $this->assertTrue($fs->exists("{$this->testDir}/empty-file"));
+        $this->assertTrue($fs->exists("{$this->testDir}/empty-dir"));
+        $this->assertTrue($fs->exists("{$this->testDir}/symlink-file"));
+        $this->assertTrue($fs->exists("{$this->testDir}/symlink-dir"));
+        $this->assertTrue($fs->exists("{$this->testDir}/readonly-file"));
+        $this->assertTrue($fs->exists("{$this->testDir}/writeonly-file"));
+        $this->assertFalse($fs->exists("{$this->testDir}/non-existing"));
         // Error as outside open_basedir => false
         $this->assertFalse($fs->exists('/'));
     }
 
     public function testIsFile(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         // Absolute paths
-        $this->assertTrue($fs->isFile("{$bp}/empty-file"));
-        $this->assertFalse($fs->isFile("{$bp}/empty-dir"));
-        $this->assertTrue($fs->isFile("{$bp}/symlink-file"));
-        $this->assertFalse($fs->isFile("{$bp}/symlink-dir"));
-        $this->assertTrue($fs->isFile("{$bp}/readonly-file"));
-        $this->assertFalse($fs->isFile("{$bp}/non-existing"));
+        $this->assertTrue($fs->isFile("{$this->testDir}/empty-file"));
+        $this->assertFalse($fs->isFile("{$this->testDir}/empty-dir"));
+        $this->assertTrue($fs->isFile("{$this->testDir}/symlink-file"));
+        $this->assertFalse($fs->isFile("{$this->testDir}/symlink-dir"));
+        $this->assertTrue($fs->isFile("{$this->testDir}/readonly-file"));
+        $this->assertTrue($fs->isFile("{$this->testDir}/writeonly-file"));
+        $this->assertFalse($fs->isFile("{$this->testDir}/non-existing"));
         // Error as outside open_basedir => false
         $this->assertFalse($fs->isFile('/'));
     }
 
     public function testIsDirectory(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         // Absolute paths
-        $this->assertFalse($fs->isDirectory("{$bp}/empty-file"));
-        $this->assertTrue($fs->isDirectory("{$bp}/empty-dir"));
-        $this->assertFalse($fs->isDirectory("{$bp}/symlink-file"));
-        $this->assertTrue($fs->isDirectory("{$bp}/symlink-dir"));
-        $this->assertFalse($fs->isDirectory("{$bp}/readonly-file"));
-        $this->assertFalse($fs->isDirectory("{$bp}/non-existing"));
+        $this->assertFalse($fs->isDirectory("{$this->testDir}/empty-file"));
+        $this->assertTrue($fs->isDirectory("{$this->testDir}/empty-dir"));
+        $this->assertFalse($fs->isDirectory("{$this->testDir}/symlink-file"));
+        $this->assertTrue($fs->isDirectory("{$this->testDir}/symlink-dir"));
+        $this->assertFalse($fs->isDirectory("{$this->testDir}/readonly-file"));
+        $this->assertFalse($fs->isDirectory("{$this->testDir}/writeonly-file"));
+        $this->assertFalse($fs->isDirectory("{$this->testDir}/non-existing"));
         // Error as outside open_basedir => false
         $this->assertFalse($fs->isDirectory('/'));
     }
 
     public function testIsReadable(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         // Absolute paths
-        $this->assertTrue($fs->isReadable("{$bp}/empty-file"));
-        $this->assertTrue($fs->isReadable("{$bp}/empty-dir"));
-        $this->assertTrue($fs->isReadable("{$bp}/symlink-file"));
-        $this->assertTrue($fs->isReadable("{$bp}/symlink-dir"));
-        $this->assertTrue($fs->isReadable("{$bp}/readonly-file"));
-        $this->assertFalse($fs->isReadable("{$bp}/non-existing"));
+        $this->assertTrue($fs->isReadable("{$this->testDir}/empty-file"));
+        $this->assertTrue($fs->isReadable("{$this->testDir}/empty-dir"));
+        $this->assertTrue($fs->isReadable("{$this->testDir}/symlink-file"));
+        $this->assertTrue($fs->isReadable("{$this->testDir}/symlink-dir"));
+        $this->assertTrue($fs->isReadable("{$this->testDir}/readonly-file"));
+        $this->assertFalse($fs->isReadable("{$this->testDir}/writeonly-file"));
+        $this->assertFalse($fs->isReadable("{$this->testDir}/non-existing"));
         // Error as outside open_basedir => false
         $this->assertFalse($fs->isReadable('/'));
     }
 
     public function testIsWritable(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         // Absolute paths
-        $this->assertTrue($fs->isWritable("{$bp}/empty-file"));
-        $this->assertTrue($fs->isWritable("{$bp}/empty-dir"));
-        $this->assertTrue($fs->isWritable("{$bp}/symlink-file"));
-        $this->assertTrue($fs->isWritable("{$bp}/symlink-dir"));
-        $this->assertFalse($fs->isWritable("{$bp}/readonly-file"));
-        $this->assertFalse($fs->isWritable("{$bp}/non-existing"));
+        $this->assertTrue($fs->isWritable("{$this->testDir}/empty-file"));
+        $this->assertTrue($fs->isWritable("{$this->testDir}/empty-dir"));
+        $this->assertTrue($fs->isWritable("{$this->testDir}/symlink-file"));
+        $this->assertTrue($fs->isWritable("{$this->testDir}/symlink-dir"));
+        $this->assertFalse($fs->isWritable("{$this->testDir}/readonly-file"));
+        $this->assertTrue($fs->isWritable("{$this->testDir}/writeonly-file"));
+        $this->assertFalse($fs->isWritable("{$this->testDir}/non-existing"));
         // Error as outside open_basedir => false
         $this->assertFalse($fs->isWritable('/'));
     }
 
     public function testMakeDirectory(): void
     {
-        $bp = sys_get_temp_dir();
         $fs = new FileSystem();
-        $dirPath = $fs->makeDirectory("{$bp}/tmp-directory-" . rand(10000, 99999));
+        $dirPath = $fs->makeDirectory("{$this->testDir}/new-directory");
         $this->assertTrue($fs->isDirectory($dirPath));
         $fs->removeDirectory($dirPath);
         $this->assertFalse($fs->isDirectory($dirPath));
@@ -112,9 +111,8 @@ class FileSystemTest extends TestCase
 
     public function testMakeDirectoryRecursive(): void
     {
-        $bp = sys_get_temp_dir();
         $fs = new FileSystem();
-        $dirPath = $fs->makeDirectory("{$bp}/tmp-directory/dir/dir-" . rand(10000, 99999), recursive: true);
+        $dirPath = $fs->makeDirectory("{$this->testDir}/recursive/new-directory", recursive: true);
         $this->assertTrue($fs->isDirectory($dirPath));
         $fs->removeDirectory($dirPath);
         $this->assertFalse($fs->isDirectory($dirPath));
@@ -122,9 +120,8 @@ class FileSystemTest extends TestCase
 
     public function testMakeDirectoryExistException(): void
     {
-        $bp = sys_get_temp_dir();
         $fs = new FileSystem();
-        $dirPath = $fs->makeDirectory("{$bp}/tmp-directory-" . rand(10000, 99999));
+        $dirPath = $fs->makeDirectory("{$this->testDir}/new-directory");
         $this->expectException(FileSystemException::class);
         $this->expectExceptionMessage('Could not create directory:');
         $dirPath = $fs->makeDirectory($dirPath);
@@ -132,35 +129,31 @@ class FileSystemTest extends TestCase
 
     public function testMakeDirectoryRecursiveException(): void
     {
-        $bp = sys_get_temp_dir();
         $fs = new FileSystem();
         $this->expectException(FileSystemException::class);
         $this->expectExceptionMessage('Could not create directory:');
-        $fs->makeDirectory("{$bp}/tmp-directory/fail/dir-" . rand(10000, 99999));
+        $fs->makeDirectory("{$this->testDir}/non-existing/new-directory");
     }
 
     public function testRemoveDirectoryNonExistingException(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         $this->expectException(FileSystemException::class);
         $this->expectExceptionMessage('Could not remove directory:');
-        $fs->removeDirectory("{$bp}/non-existing");
+        $fs->removeDirectory("{$this->testDir}/non-existing");
     }
 
     public function testRemoveDirectoryNonEmptyException(): void
     {
-        $bp = __DIR__ . '/../fixtures';
         $fs = new FileSystem();
         $this->expectException(FileSystemException::class);
         $this->expectExceptionMessage('Could not remove directory:');
-        $fs->removeDirectory("{$bp}");
+        $fs->removeDirectory("{$this->testDir}");
     }
 
     public function testDirectory(): void
     {
-        $bp = sys_get_temp_dir();
-        $dir = "{$bp}/tmp-directory/dir/dir-" . rand(10000, 99999);
+        $dir = "{$this->testDir}/persistent/directory";
         $fs = new FileSystem();
         // Not existing: null
         $dirPath = $fs->directory($dir);
