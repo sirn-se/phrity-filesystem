@@ -1,0 +1,35 @@
+{
+    "name": "phrity/filesystem",
+    "type": "library",
+    "description": "",
+    "homepage": "https://phrity.sirn.se/filesystem",
+    "keywords": [],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sören Jensen",
+            "email": "sirn@sirn.se",
+            "homepage": "https://phrity.sirn.se"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Phrity\\FileSystem\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phrity\\FileSystem\\Test\\": "tests/src/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "phrity/util-errorhandler": "^1.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+        "robiningelbrecht/phpunit-coverage-tools": "^1.9",
+        "squizlabs/php_codesniffer": "^4.0"
+    }
+}
